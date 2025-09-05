@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import Analytiics from '../components/analyticsForHome/Analytiics'
 import Layout from '../components/layout/Layout';
-import { Form, Modal, Input, Select, Button, message, Flex, Spin,DatePicker } from 'antd';
+import { Form, Modal, Input, Select, Button, message, Flex, Spin, DatePicker } from 'antd';
 import moment from 'moment';
 import axios from 'axios';
 import Card from '../components/analyticsForHome/Card';
 import AnalyticsForReport from '../components/AnalyticsForReport/AnalyticsForReport';
-const{RangePicker}=DatePicker
+const { RangePicker } = DatePicker
 
-const Home = () => {
+const Report = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const categoryData = {
-    Income: ['Salary','Buisness Income', 'Tips', 'Gifts','other'],
-    Expense: ['Food', 'Entertainment', 'Bills', 'Transportation','Shopping','Financial','Other'],
+    Income: ['Salary', 'Buisness Income', 'Tips', 'Gifts', 'other'],
+    Expense: ['Food', 'Entertainment', 'Bills', 'Transportation', 'Shopping', 'Financial', 'Other'],
   };
   const { Option } = Select;
   const [form] = Form.useForm();
@@ -22,10 +22,10 @@ const Home = () => {
   const [transactionDetails, setTransactionDetails] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  const [frequency,setFrequency]=useState('30');;
-  const [selectedDate,setSelectedDate]=useState([]);
-const [typeofTrans ,setTypeofTrans]=useState('all');
-const [transcationDetalsForcard,setTranscationDetalsForcard]=useState([])
+  const [frequency, setFrequency] = useState('30');;
+  const [selectedDate, setSelectedDate] = useState([]);
+  const [typeofTrans, setTypeofTrans] = useState('all');
+  const [transcationDetalsForcard, setTranscationDetalsForcard] = useState([])
   // form handaling
   const handleSubmit = async (values) => {
     console.log(values);
@@ -50,7 +50,7 @@ const [transcationDetalsForcard,setTranscationDetalsForcard]=useState([])
     try {
       setloading(true);
       const user = JSON.parse(localStorage.getItem('user'));
-      const res = await axios.post('/api/v1/transactions/get-transaction', { userid: user._id,frequency ,selectedDate,typeofTrans});
+      const res = await axios.post('/api/v1/transactions/get-transaction', { userid: user._id, frequency, selectedDate, typeofTrans });
       console.log(res.data);
       setTransactionDetails(res.data);
       setloading(false);
@@ -60,16 +60,16 @@ const [transcationDetalsForcard,setTranscationDetalsForcard]=useState([])
   };
   useEffect(() => {
     getallTransction();
-  }, [frequency,selectedDate,typeofTrans]);
+  }, [frequency, selectedDate, typeofTrans]);
   //get details for card
-  const getDetalisforCard=async ()=>{
-     try {
-      
+  const getDetalisforCard = async () => {
+    try {
+
       setloading(true);
       const user = JSON.parse(localStorage.getItem('user'));
-      const res = await axios.post('/api/v1/transactions/get-transactionmonth', { userid: user._id,date:new Date().getMonth()});
+      const res = await axios.post('/api/v1/transactions/get-transactionmonth', { userid: user._id, date: new Date().getMonth() });
       console.log(new Date().getMonth());
-      
+
       console.log(res.data);
       setTranscationDetalsForcard(res.data);
       setloading(false);
@@ -77,20 +77,21 @@ const [transcationDetalsForcard,setTranscationDetalsForcard]=useState([])
       message.error('face some issues');
     }
   }
-  useEffect(()=>{
-getDetalisforCard();
-  },[])
+  useEffect(() => {
+    getDetalisforCard();
+  }, [])
 
 
 
-const handleCustompicker=(values)=>{
-  if(values===null){
-   
-    setFrequency('7')
-   
-  }else{
-  setSelectedDate(values)}
-}
+  const handleCustompicker = (values) => {
+    if (values === null) {
+
+      setFrequency('7')
+
+    } else {
+      setSelectedDate(values)
+    }
+  }
 
   const handleTypeChange = (value) => {
     setType(value);
@@ -103,61 +104,20 @@ const handleCustompicker=(values)=>{
 
 
   //handle delete
-  const handleDeleteTrans= async (id)=>{
+  const handleDeleteTrans = async (id) => {
     try {
-      const res=await axios.delete(`/api/v1/transactions/delete/${id}`);
+      const res = await axios.delete(`/api/v1/transactions/delete/${id}`);
       message.success("Transaction Deleted successfully")
       getallTransction();
       getDetalisforCard()
     } catch (error) {
       message.error('Item not deleted due to some internal issue')
       console.log(error);
-      
+
     }
   }
 
-  //table body
-  const Tbody = () => {
-    if (loading) {
-      return (
-        <tr className="text-center">
-          <td colSpan={10} className="px-4 py-3">Loading....</td>
-        </tr>
-      );
-    }
-    if (transactionDetails.length === 0) {
-      return (
-        <tr className="text-center">
-          <td colSpan={10} className="px-4 py-3">No data found</td>
-        </tr>
-      );
-    }
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const paginatedData = transactionDetails.slice(startIndex, endIndex);
-    return (
-      <>
-        {paginatedData.map((item, idx) => {
-          return (
-            <tr key={idx} className=" text-left border-b-2 border-zinc-200 bg-gray-100">
-              <td className="px-5 py-2">{moment(item.date).format('YYYY-MM-DD')}</td>
-              <td className="px-5 py-2 ">{item.amount}</td>
-              <td className={item.type === 'Expense' ? 'text-red-700 font-bold px-4 py-2' : 'text-green-700 font-bold px-4 py-2'}>{item.type}</td>
-              <td className="px-5 py-2 ">{item.category}</td>
-              <td className="px-5 py-2 ">{item.description}</td>
-              <td className="px-4 py-2 ">
-                <button className="bg-blue-600 px-4 py-2 rounded-sm text-white cursor-pointer hover:bg-blue-700 ">Edit</button>
-              </td>
-              <td className="px-4 py-2 ">
-                <button onClick={()=>handleDeleteTrans(item._id)}  className="bg-red-600 px-4 py-2 rounded-sm text-white cursor-pointer hover:bg-red-700 ">Delete</button>
-              </td>
-              
-            </tr>
-          );
-        })}
-      </>
-    );
-  };
+
 
   return (
     <>
@@ -165,27 +125,27 @@ const handleCustompicker=(values)=>{
       <Layout>
         {loading && (
           <div className='h-screen w-full flex justify-center items-center'>
-         
-          
+
+
             <Spin size="large" />
-        
+
           </div>
         )}
-        
+
         <div className="filter flex flex-col md:flex-row items-center justify-between shadow-xl px-3 py-5 m-2 rounded-2xl border-t-1 border-gray-400 border-x-1 gap-4">
           <div className="rangefilter flex gap-3">
             <div className='flex gap-2 flex-wrap'>
               <h6 className='font-semibold'>Select Frequency</h6>
-              <Select value={frequency} onChange={(values)=>setFrequency(values)}>
+              <Select value={frequency} onChange={(values) => setFrequency(values)}>
                 <Option value='7'>Last 1 Weeks</Option>
                 <Option value='30'>Last 1 Months</Option>
                 <Option value='365' >Last 1 Year</Option>
                 <Option value='custom'>Custom</Option>
 
               </Select>
-              {frequency=='custom' && <RangePicker value={selectedDate} className='border-gray-700' onChange={handleCustompicker}/>}
+              {frequency == 'custom' && <RangePicker value={selectedDate} className='border-gray-700' onChange={handleCustompicker} />}
             </div>
-          
+
           </div>
           <div>
             <button onClick={() => setShowModal(true)} className="bg-blue-600 px-2 py-3 text-white font-semibold rounded-sm hover:bg-blue-700 cursor-pointer">
@@ -193,11 +153,11 @@ const handleCustompicker=(values)=>{
             </button>
           </div>
         </div>
-         <div className='analytics w-full flex justify-around p-4 gap-4 mb-10 mt-5 flex-wrap md:flex-nowrap'>
-            <Card title="Total Income" value={transactionDetails}/>
-            <Card title="Total Expense" value={transactionDetails}/>
-            <Card title="Net Amount" value={transactionDetails}/>
-          </div>
+        <div className='analytics w-full flex justify-around p-4 gap-4 mb-10 mt-5 flex-wrap md:flex-nowrap'>
+          <Card title="Total Income" value={transactionDetails} />
+          <Card title="Total Expense" value={transactionDetails} />
+          <Card title="Net Amount" value={transactionDetails} />
+        </div>
         <div className="content">
           <Modal title="Add Transaction" open={showModal} onCancel={() => setShowModal(false)} footer={false}>
             <Form form={form} layout="vertical" onFinish={handleSubmit}>
@@ -243,10 +203,10 @@ const handleCustompicker=(values)=>{
               </div>
             </Form>
           </Modal>
-         
+
           <div>
-              <AnalyticsForReport value={transactionDetails}/>
-           
+            <AnalyticsForReport value={transactionDetails} />
+
           </div>
         </div>
       </Layout>
@@ -254,4 +214,4 @@ const handleCustompicker=(values)=>{
   );
 };
 
-export default Home;
+export default Report;

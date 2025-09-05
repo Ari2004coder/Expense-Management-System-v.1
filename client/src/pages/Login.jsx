@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useForm } from "react-hook-form"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useState ,useEffect} from 'react';
+import { useState, useEffect } from 'react';
 
 const Login = () => {
 
@@ -25,16 +25,16 @@ const Login = () => {
 
     try {
 
-      const {data} = await axios.post('/api/v1/user/login', { email, password })
+      const { data } = await axios.post('/api/v1/user/login', { email, password })
 
 
       toast.success("Loged in Sucessfuly done! please wait");
-      localStorage.setItem('user',JSON.stringify({...data,password:""}))
-      setTimeout(()=>{
+      localStorage.setItem('user', JSON.stringify({ ...data, password: "" }))
+      setTimeout(() => {
         navigate('/');
-      },2000)
+      }, 2000)
       //navigate('/login')
-     
+
     }
     catch (errors) {
 
@@ -45,19 +45,19 @@ const Login = () => {
 
 
   }
-    //prevent for login user
-    useEffect(()=>{
-      if(localStorage.getItem('user')){
-        navigate("/")
-      }
-    },[navigate])
+  //prevent for login user
+  useEffect(() => {
+    if (localStorage.getItem('user')) {
+      navigate("/")
+    }
+  }, [navigate])
 
   return (
     <div className='h-screen w-screen flex justify-center items-center top-1/2 left-1/2  bg-gray-900'>
       <div className='bg-white/10 backdrop-blur-sm py-10 px-9 w-full sm:w-3/4 md:w-1/2 lg:w-1/3 rounded-2xl items-baseline'>
         <h1 className='text-white font-bold mb-10 text-3xl text-center'>LogIn</h1>
         <form action="" onSubmit={handleSubmit(onFinish)} className='text-white flex flex-col gap-3 items-baseline '>
-          
+
           <div className='flex flex-col space-y-2 w-full'>
             <label htmlFor="username">Email:</label>
             <input placeholder='email@gmail.com' type="email" className='border-2 w-full border-amber-50 bg-white text-black rounded-sm focus:border-tranparent px-4 py-3' {...register("email", {

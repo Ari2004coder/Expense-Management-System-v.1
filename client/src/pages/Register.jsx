@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useForm } from "react-hook-form"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const Register = () => {
 
@@ -42,11 +42,11 @@ const Register = () => {
 
   }
   //prevent for login user
-  useEffect(()=>{
-    if(localStorage.getItem('user')){
+  useEffect(() => {
+    if (localStorage.getItem('user')) {
       navigate("/")
     }
-  },[navigate])
+  }, [navigate])
 
   return (
     <div className='h-screen w-screen flex justify-center items-center top-1/2 left-1/2  bg-gray-900'>

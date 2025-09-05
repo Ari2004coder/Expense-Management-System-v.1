@@ -14,26 +14,26 @@ function App() {
 
   return (
     <>
-    <Routes>
-      
-      <Route path='/' element={<ProtectedRoutes><Home/></ProtectedRoutes>}/>
-      <Route path='/register' element={<Register/>}/>
-      <Route path='/login' element={<Login/>}/>
-      <Route path='/reports' element={<ProtectedRoutes><Report/></ProtectedRoutes>} /> {/* Make Report protected */}
-      <Route path='/expenses' element={<ProtectedRoutes><Expense/></ProtectedRoutes>} /> {/* Make Expense protected */}
-      <Route path='/incomes' element={<ProtectedRoutes><Incomes/></ProtectedRoutes>} /> {/* Make Incomes protected */}
-      <Route path='/profile' element={<ProtectedRoutes><Profile/></ProtectedRoutes>} /> {/* Add Profile route */}
-    </Routes>
+      <Routes>
+
+        <Route path='/' element={<ProtectedRoutes><Home /></ProtectedRoutes>} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/reports' element={<ProtectedRoutes><Report /></ProtectedRoutes>} /> {/* Make Report protected */}
+        <Route path='/expenses' element={<ProtectedRoutes><Expense /></ProtectedRoutes>} /> {/* Make Expense protected */}
+        <Route path='/incomes' element={<ProtectedRoutes><Incomes /></ProtectedRoutes>} /> {/* Make Incomes protected */}
+        <Route path='/profile' element={<ProtectedRoutes><Profile /></ProtectedRoutes>} /> {/* Add Profile route */}
+      </Routes>
     </>
   )
- 
+
 }
- export function ProtectedRoutes(props){
-    if(localStorage.getItem('user')){
-      return props.children
-    }else{
-      return <Navigate to='/login'/>
-    }
+export function ProtectedRoutes(props) {
+  if (localStorage.getItem('user')) {
+    return props.children
+  } else {
+    return <Navigate to='/login' />
   }
+}
 
 export default App
