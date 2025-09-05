@@ -1,4 +1,1 @@
-﻿# Expenso Version 1
- 
-
-
+﻿ExPense Mangement System

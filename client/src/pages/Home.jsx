@@ -24,7 +24,9 @@ const Home = () => {
   const [frequency,setFrequency]=useState('7');;
   const [selectedDate,setSelectedDate]=useState([]);
 const [typeofTrans ,setTypeofTrans]=useState('all');
-const [transcationDetalsForcard,setTranscationDetalsForcard]=useState([])
+const [transcationDetalsForcard,setTranscationDetalsForcard]=useState([]);
+const [idforedit,setidForEdit]=useState("");
+const[showModalForUpdate,setShowModalforUpadte]=useState(false);
   // form handaling
   const handleSubmit = async (values) => {
     console.log(values);
@@ -115,6 +117,26 @@ const handleCustompicker=(values)=>{
     }
   }
 
+  /// Upadte trans
+  const handleclickUpadte=(id)=>{
+setShowModalforUpadte(true);
+setidForEdit(id);
+  }
+  const handleUpdateTrans=async (values)=>{
+    
+    try {
+    const res= await axios.put(`/api/v1/transactions/update/${idforedit}`,values)
+      message.success("update success");
+      getallTransction();
+      getDetalisforCard();
+      setShowModalforUpadte(false);
+    } catch (error) {
+      message.error("face some error")
+    }
+    
+  }
+
+
   //table body
   const Tbody = () => {
     if (loading) {
@@ -145,7 +167,7 @@ const handleCustompicker=(values)=>{
               <td className="px-5 py-2 ">{item.category}</td>
               <td className="px-5 py-2 ">{item.description}</td>
               <td className="px-4 py-2 ">
-                <button className="bg-blue-600 px-4 py-2 rounded-sm text-white cursor-pointer hover:bg-blue-700 ">Edit</button>
+                <button onClick={()=>handleclickUpadte(item._id)} className="bg-blue-600 px-4 py-2 rounded-sm text-white cursor-pointer hover:bg-blue-700 ">Edit</button>
               </td>
               <td className="px-4 py-2 ">
                 <button onClick={()=>handleDeleteTrans(item._id)}  className="bg-red-600 px-4 py-2 rounded-sm text-white cursor-pointer hover:bg-red-700 ">Delete</button>
@@ -171,15 +193,15 @@ const handleCustompicker=(values)=>{
         
           </div>
         )}
-         <div className='analytics w-full flex justify-around p-3  gap-4'>
+         <div className='analytics w-full flex justify-around p-3  gap-4 flex-wrap md:flex-nowrap'>
             <Card title="Total Income" value={transactionDetails}/>
             <Card title="Total Expense" value={transactionDetails}/>
             <Card title="Net Amount" value={transactionDetails}/>
           </div>
-        <div className="filter flex items space-y-3 items-center justify-between shadow-xl px-3 py-5 m-2 rounded-2xl border-t-1 border-gray-400 border-x-1 flex-wrap">
-          <div className="rangefilter flex gap-3">
+        <div className="filter flex flex-col md:flex-row items-center justify-between shadow-xl px-3 py-5 m-2 rounded-2xl border-t-1 border-gray-400 border-x-1 gap-4">
+          <div className="rangefilter flex flex-wrap gap-3">
             <div className='flex gap-2 flex-wrap'>
-              <h6 className='font-semibold'>Select Frequency</h6>
+              <h6 className='font-semibold text-2xl'>Select Frequency</h6>
               <Select value={frequency} onChange={(values)=>setFrequency(values)}>
                 <Option value='7'>Last 1 Weeks</Option>
                 <Option value='30'>Last 1 Months</Option>
@@ -248,6 +270,50 @@ const handleCustompicker=(values)=>{
               <div>
                 <Button type="primary" htmlType="submit">
                   Save
+                </Button>
+              </div>
+            </Form>
+          </Modal>
+          <Modal title="Edit Transaction" open={showModalForUpdate} onCancel={() => setShowModalforUpadte(false)} footer={false}>
+            <Form form={form} layout="vertical" onFinish={handleUpdateTrans}>
+              <Form.Item label="Amount" name="amount">
+                <Input type="Text" />
+              </Form.Item>
+              <Form.Item name="type" label="Type">
+                <Select placeholder="Select a type" onChange={handleTypeChange}>
+                  <Option value="Income">Income</Option>
+                  <Option value="Expense">Expense</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item name="category" label="Category">
+                <Select
+                  placeholder="Select a category"
+                  // The category dropdown is disabled until a type is selected
+                  disabled={!type}
+                >
+                  {/* Dynamically render options based on the selected type.
+              We use `categoryData[type]` to get the correct array of options.
+              The `|| []` is a fallback to prevent errors if `type` is not yet set.
+            */}
+                  {(categoryData[type] || []).map((category) => (
+                    <Option key={category} value={category}>
+                      {category}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item label="Date" name="date">
+                <Input type="date" />
+              </Form.Item>
+              <Form.Item label="Refrence" name="refrence">
+                <Input type="text" />
+              </Form.Item>
+              <Form.Item label="Description" name="description">
+                <Input type="text" />
+              </Form.Item>
+              <div>
+                <Button type="primary" htmlType="submit">
+                  Update
                 </Button>
               </div>
             </Form>

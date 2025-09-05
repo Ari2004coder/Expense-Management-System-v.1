@@ -179,7 +179,7 @@ const handleCustompicker=(values)=>{
        
             <AnalytcisForIncome value={transcationDetailsForanalytic}/>
           
-        <div className="filter flex items space-y-3 items-center justify-between shadow-xl px-3 py-5 m-2 rounded-2xl border-t-1 border-gray-400 border-x-1 flex-wrap">
+        <div className="filter flex flex-col md:flex-row items-center justify-between shadow-xl px-3 py-5 m-2 rounded-2xl border-t-1 border-gray-400 border-x-1 gap-4">
           <div className="rangefilter flex gap-3">
             <div className='flex gap-2 flex-wrap'>
               <h6 className='font-semibold'>Select Frequency</h6>

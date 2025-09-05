@@ -89,7 +89,19 @@ try {
     res.status(500).json(error)
 }
 }
-const UpdateTransaction=async ()=>{
-    const updatetrans=await transactionModel.findByIdAndUpdate(req.body)
+const updateTransaction=async (req,res)=>{
+        try {
+        const id=req.params.id;
+        const updatetrans=await transactionModel.findByIdAndUpdate(id,req.body, {new: true});
+        if (!updatetrans) {
+            return res.status(404).send("Transaction not found");
+        }
+        res.status(200).json({
+            success:true,
+            data:updatetrans
+        })
+    } catch (error) {
+        res.status(500).json(error)
+    }
 }
-module.exports={getAllTransaction,addTransaction,getAllTransactionMonth,deleteTransaction,getAllTransactionYearly}
+module.exports={getAllTransaction,addTransaction,getAllTransactionMonth,deleteTransaction,getAllTransactionYearly,updateTransaction}

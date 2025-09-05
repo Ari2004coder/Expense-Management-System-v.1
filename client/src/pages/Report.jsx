@@ -172,7 +172,7 @@ const handleCustompicker=(values)=>{
           </div>
         )}
         
-        <div className="filter flex items space-y-3 items-center justify-between shadow-xl px-3 py-5 m-2 rounded-2xl border-t-1 border-gray-400 border-x-1 flex-wrap">
+        <div className="filter flex flex-col md:flex-row items-center justify-between shadow-xl px-3 py-5 m-2 rounded-2xl border-t-1 border-gray-400 border-x-1 gap-4">
           <div className="rangefilter flex gap-3">
             <div className='flex gap-2 flex-wrap'>
               <h6 className='font-semibold'>Select Frequency</h6>
@@ -193,7 +193,7 @@ const handleCustompicker=(values)=>{
             </button>
           </div>
         </div>
-         <div className='analytics w-full flex justify-around p-4 gap-4 mb-10 mt-5'>
+         <div className='analytics w-full flex justify-around p-4 gap-4 mb-10 mt-5 flex-wrap md:flex-nowrap'>
             <Card title="Total Income" value={transactionDetails}/>
             <Card title="Total Expense" value={transactionDetails}/>
             <Card title="Net Amount" value={transactionDetails}/>

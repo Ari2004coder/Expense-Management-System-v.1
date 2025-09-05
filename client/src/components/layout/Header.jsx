@@ -34,7 +34,7 @@ const Header = () => {
       >
         &#9776;
       </button>
-      <ul className={`flex-col md:flex-row md:flex absolute md:static top-full left-0 w-full md:w-auto bg-gray-800 md:bg-transparent transition-all duration-300 ${open ? 'flex' : 'hidden'} md:items-center md:space-x-6 `}>
+      <ul className={`flex-col md:flex-row md:flex absolute md:static top-full left-0 w-full md:w-auto bg-gray-800 md:bg-transparent transition-all duration-300 ${open ? 'flex' : 'hidden'} md:items-center md:space-x-6 z-50`}>
         <li className="border-b md:border-none">
           <Link to="/" className={getLinkClass("/")}>Home</Link>
         </li>
